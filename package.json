@@ -5,12 +5,14 @@
   "main": "index.js",
   "dependencies": {
     "alexa-sdk": "^1.0.6",
+    "aws-sdk": "^2.12.0",
     "request": "^2.79.0",
     "superagent": "^3.4.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "zip": "zip -r Nikita_For_Alexa.zip package.json *.js node_modules"
   },
   "author": "",
   "license": "ISC"
