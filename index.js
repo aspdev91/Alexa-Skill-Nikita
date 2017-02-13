@@ -1,16 +1,16 @@
 /* eslint-disable  func-names */
 /* eslint quote-props: ["error", "consistent"]*/
 
-
 'use strict';
 
-const Alexa = require('alexa-sdk');
-const request = require('superagent');
+var Alexa = require('alexa-sdk');
+var request = require('superagent');
+var getLatestTrainTimes = require('mta.js');
 // var AWS = require('aws-sdk');
 
-const APP_ID = 'amzn1.ask.skill.ed442aba-79c5-456b-b663-90edbbcf2efe';  // TODO replace with your app ID (OPTIONAL).
+var APP_ID = 'amzn1.ask.skill.ed442aba-79c5-456b-b663-90edbbcf2efe';  // TODO replace with your app ID (OPTIONAL).
 
-const handlers = {
+var handlers = {
     'LaunchRequest': function () {
         this.emit('GetFact');
     },
@@ -29,14 +29,14 @@ const handlers = {
                     console.log(err)
                 };
                 console.log(res)
-                let newsSource = res.body.result.source;
-                let articles = res.body.result.articles
-                this.emit(':tellWithCard', readNews(articles, newsSource));
+                var newsSource = res.body.result.source;
+                var articles = res.body.result.articles
+                this.emit(':tellWithCard', "According to Nikita, " + readNews(articles, newsSource));
             })
 
         function readNews(articles, newsSource) {
-            let allArticles = 'This is whats happening on ' + newsSource + ' . . . .';
-            let count = 0
+            var allArticles = 'This is whats happening on ' + newsSource + ' . . . .';
+            var count = 0
             for (var article of articles) {
                 if (count >= 3) {
                     break
@@ -59,13 +59,26 @@ const handlers = {
                     console.log("There's been an error.")
                     console.log(err)
                 };
-                this.emit(':tellWithCard', res.body.result);
+                this.emit(':tellWithCard', "According to Nikita, " + res.body.result);
+            })
+
+    },
+    'train': function () {
+
+        request.get('http://mtaapi.herokuapp.com/api?id=G18S')
+            .end((err, res, body) => {
+                if (err) {
+                    console.log("There's been an error.")
+                    console.log(err)
+                };
+                var trainSchedule = getLatestTrainTimes(res.body.result.arrivals)
+                this.emit(':tellWithCard', "According to Nikita, " + trainSchedule);
             })
 
     },
     'AMAZON.HelpIntent': function () {
-        const speechOutput = this.t('HELP_MESSAGE');
-        const reprompt = this.t('HELP_MESSAGE');
+        var speechOutput = this.t('HELP_MESSAGE');
+        var reprompt = this.t('HELP_MESSAGE');
         this.emit(':ask', speechOutput, reprompt);
     },
     'AMAZON.CancelIntent': function () {
@@ -80,10 +93,12 @@ const handlers = {
 };
 
 exports.handler = (event, context) => {
-    const alexa = Alexa.handler(event, context);
+    var alexa = Alexa.handler(event, context);
     alexa.APP_ID = APP_ID;
     // To enable string internationalization (i18n) features, set a resources object.
     // alexa.resources = languageStrings;
     alexa.registerHandlers(handlers);
     alexa.execute();
 };
+
+
