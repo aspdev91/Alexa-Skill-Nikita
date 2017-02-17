@@ -1,4 +1,4 @@
 # Alexa-Skill-Nikita (Click on pic for video)
 
-[![Nikita AI](http://i.imgur.com/QN0boQc.jpg)](https://youtu.be/mL5-UXJEp-U)
+[![Nikita AI](https://cdn.pbrd.co/images/z4Aq3hpuz.png)](https://youtu.be/mL5-UXJEp-U)
 
